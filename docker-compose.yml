@@ -1,6 +1,7 @@
 services:
   graph-node:
     image: graphprotocol/graph-node
+    platform: linux/amd64
     ports:
       - '8000:8000'
       - '8001:8001'
@@ -20,6 +21,7 @@ services:
       GRAPH_LOG: info
   ipfs:
     image: ipfs/kubo:v0.29.0
+    platform: linux/amd64
     ports:
       - '5001:5001'
     volumes:
