@@ -1,0 +1,120 @@
+specVersion: 1.2.0
+schema:
+  file: schema.graphql
+dataSources:
+  - kind: ethereum/contract
+    name: tokenregistry
+    network: localhost
+    source:
+      address: "0x61978b4272a429f14a186e10DEAA51bb8a7Fc6a8"
+      abi: TokenRegistry
+      startBlock: 11351972
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - TokenRegistry
+      abis:
+        - name: TokenRegistry
+          file: ../out/Registry.sol/Registry.json
+        - name: Token
+          file: ../out/Token.sol/Token.json
+      eventHandlers:
+        - event: TokenAdded(address,string,address,string)
+          handler: handleTokenAdded
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+      file: ./src/tokenregistry.ts
+      # - kind: ethereum/contract
+    # name: universal-verifier
+    # network: localhost
+    # source:
+    #   address: "0x70696036CA1868B42155b06235F95549667Eb0BE"
+    #   abi: UniversalVerifier
+    #   startBlock: 8813472
+    # mapping:
+    #   kind: ethereum/events
+    #   apiVersion: 0.0.9
+    #   language: wasm/assemblyscript
+    #   entities:
+    #     - ZKPRequestSet
+    #     - ZKPResponseSubmitted
+    #   abis:
+    #     - name: UniversalVerifier
+    #       file: ../out/IUniversalVerifier.sol/IUniversalVerifier.json
+    #   eventHandlers:
+    #     - event: ZKPResponseSubmitted(indexed uint64,indexed address)
+    #       handler: handleZKPResponseSubmitted
+    #   file: ./src/universal-verifier.ts
+templates:
+  - kind: ethereum/contract
+    name: token
+    network: localhost
+    source:
+      abi: Token
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - TokenContract
+        - Account
+        - TokenBalance
+        - TokenApproval
+        - TokenTransfer
+        - ExemptAddress
+        - FrozenAddress
+      abis:
+        - name: Token
+          file: ../out/Token.sol/Token.json
+      eventHandlers:
+        - event: AddressExemptStatusChanged(indexed address,bool)
+          handler: handleAddressExemptStatusChanged
+        - event: AddressFrozen(indexed address,indexed address)
+          handler: handleAddressFrozen
+        - event: AddressThawed(indexed address,indexed address)
+          handler: handleAddressThawed
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+        - event: BurnTargetChanged(indexed address)
+          handler: handleBurnTargetChanged
+        - event: CapChanged(uint256)
+          handler: handleCapChanged
+        - event: FeeChanged(indexed uint8,uint256)
+          handler: handleFeeChanged
+        - event: FeeRecipientChanged(indexed address)
+          handler: handleFeeRecipientChanged
+        - event: MintSourceChanged(indexed address)
+          handler: handleMintSourceChanged
+        - event: Paused(address)
+          handler: handlePaused
+        - event: RescueRecipientChanged(indexed address)
+          handler: handleRescueRecipientChanged
+        - event: RoleAdminChanged(indexed bytes32,indexed bytes32,indexed bytes32)
+          handler: handleRoleAdminChanged
+        - event: RoleGranted(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleGranted
+        - event: RoleRevoked(indexed bytes32,indexed address,indexed address)
+          handler: handleRoleRevoked
+        - event: TokensFrozen(indexed address,uint256,indexed address)
+          handler: handleTokensFrozen
+        - event: TokensThawed(indexed address,uint256,indexed address)
+          handler: handleTokensThawed
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Unpaused(address)
+          handler: handleUnpaused
+        - event: ComplianceAdded(indexed address)
+          handler: handleComplianceAdded
+        - event: ComplianceRemoved(indexed address)
+          handler: handleComplianceRemoved
+      file: ./src/token.ts
+features:
+  - nonFatalErrors
+  - fullTextSearch
+  - ipfsOnEthereumContracts

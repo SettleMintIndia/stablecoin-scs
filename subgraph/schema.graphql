@@ -1,0 +1,194 @@
+type RegistryToken @entity {
+	id: ID!
+	contract: TokenContract!
+	symbol: String!
+	tokenFactory: Account!
+	extraData: String!
+}
+type Account @entity {
+	id: Bytes!
+	asToken: TokenContract
+	tokenBalances: [TokenBalance!]! @derivedFrom(field: "account")
+	tokenApprovalsOwner: [TokenApproval!]! @derivedFrom(field: "owner")
+	tokenApprovalsSpender: [TokenApproval!]! @derivedFrom(field: "spender")
+	tokenTransferFromEvent: [TokenTransfer!]! @derivedFrom(field: "from")
+	tokenTransferToEvent: [TokenTransfer!]! @derivedFrom(field: "to")
+	exemptAddresses: [ExemptAddress!]! @derivedFrom(field: "account")
+	frozenAddresses: [FrozenAddress!]! @derivedFrom(field: "account")
+	nativeValue: BigDecimal!
+	nativeValueExact: BigInt!
+	asAccessControl: AccessControl
+	membership: [AccessControlRoleMember!]! @derivedFrom(field: "account")
+	roleGranted: [RoleGranted!]! @derivedFrom(field: "account")
+	roleGrantedSender: [RoleGranted!]! @derivedFrom(field: "sender")
+	roleRevoked: [RoleRevoked!]! @derivedFrom(field: "account")
+	roleRevokedSender: [RoleRevoked!]! @derivedFrom(field: "sender")
+	events: [Event!]! @derivedFrom(field: "emitter")
+	verfifiedZKPRequests: [VerfifiedZKPRequest!]! @derivedFrom(field: "account")
+}
+type TokenContract @entity {
+	id: Bytes!
+	paused: Boolean
+	asAccount: Account!
+	name: String!
+	symbol: String!
+	decimals: Int!
+	mintType: String
+
+	cap: BigDecimal!
+	capExact: BigInt!
+
+	totalSupply: BigDecimal!
+	totalSupplyExact: BigInt!
+
+	mintFeePercentage: BigDecimal!
+	mintFeePercentageExact: BigInt!
+
+	burnFeePercentage: BigDecimal!
+	burnFeePercentageExact: BigInt!
+
+	transferFeePercentage: BigDecimal!
+	transferFeePercentageExact: BigInt!
+
+	burnTarget: Account!
+	mintSource: Account!
+	rescueRecipient: Account!
+	complianceAdded: Account
+	complianceStatus: Boolean
+	feeRecipient: Account!
+
+	balances: [TokenBalance!]! @derivedFrom(field: "contract")
+	feeExemptAddresses: [ExemptAddress!]! @derivedFrom(field: "contract")
+	approvals: [TokenApproval!]! @derivedFrom(field: "contract")
+	transfers: [TokenTransfer!]! @derivedFrom(field: "contract")
+	registryToken: RegistryToken! @derivedFrom(field: "contract")
+}
+type TokenBalance @entity {
+	id: ID!
+	contract: TokenContract!
+	account: Account
+	value: BigDecimal!
+	valueExact: BigInt!
+	frozenValue: BigDecimal!
+	frozenValueExact: BigInt!
+	transferFromEvent: [TokenTransfer!]! @derivedFrom(field: "fromBalance")
+	transferToEvent: [TokenTransfer!]! @derivedFrom(field: "toBalance")
+}
+type TokenApproval @entity {
+	id: ID!
+	contract: TokenContract!
+	owner: Account!
+	spender: Account!
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+type TokenTransfer implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	contract: TokenContract!
+	from: Account
+	fromBalance: TokenBalance
+	to: Account
+	toBalance: TokenBalance
+	value: BigDecimal!
+	valueExact: BigInt!
+}
+type ExemptAddress @entity {
+	id: ID!
+	contract: TokenContract!
+	account: Account!
+	isExempt: Boolean
+}
+type FrozenAddress @entity {
+	id: ID!
+	contract: TokenContract!
+	account: Account!
+	isFrozen: Boolean
+}
+type AccessControl @entity(immutable: true) {
+	id: Bytes!
+	asAccount: Account!
+	roles: [AccessControlRole!]! @derivedFrom(field: "contract")
+}
+type Role @entity(immutable: true) {
+	id: Bytes!
+	roleOf: [AccessControlRole!]! @derivedFrom(field: "role")
+}
+type AccessControlRole @entity {
+	id: ID!
+	contract: AccessControl!
+	role: Role!
+	admin: AccessControlRole!
+	adminOf: [AccessControlRole!]! @derivedFrom(field: "admin")
+	members: [AccessControlRoleMember!]! @derivedFrom(field: "accesscontrolrole")
+	roleGranted: [RoleGranted!]! @derivedFrom(field: "role")
+	roleRevoked: [RoleRevoked!]! @derivedFrom(field: "role")
+	roleAdminChanged: [RoleAdminChanged!]! @derivedFrom(field: "role")
+}
+type AccessControlRoleMember @entity {
+	id: ID!
+	accesscontrolrole: AccessControlRole!
+	account: Account!
+}
+type RoleAdminChanged implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	role: AccessControlRole!
+	newAdminRole: AccessControlRole!
+	previousAdminRole: AccessControlRole!
+}
+type RoleGranted implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	role: AccessControlRole!
+	account: Account!
+	sender: Account!
+}
+type RoleRevoked implements Event @entity(immutable: true) {
+	id: ID!
+	emitter: Account!
+	transaction: Transaction!
+	timestamp: BigInt!
+	role: AccessControlRole!
+	account: Account!
+	sender: Account!
+}
+
+type VerfifiedZKPRequest @entity {
+	id: ID!
+	requestId: BigInt!
+	account: Account!
+}
+
+interface Event {
+	id: ID!
+	transaction: Transaction!
+	emitter: Account!
+	timestamp: BigInt!
+}
+type Transaction @entity(immutable: true) {
+	id: ID!
+	timestamp: BigInt!
+	blockNumber: BigInt!
+	events: [Event!]! @derivedFrom(field: "transaction")
+}
+
+# type TokenVolume @entity(timeseries: true) {
+#   id: Int8!
+#   timestamp: Timestamp!
+# 	token: TokenContract!
+#   volume: BigInt!
+# }
+
+# type TokenVolumeStats @aggregation(intervals: [	"hour",	"day"], source: "TokenVolume") {
+#   id: Int8!
+#   timestamp: Timestamp!
+#   totalVolume: BigInt! @aggregate(fn: "sum", arg: "volume")
+# 	count: BigInt! @aggregate(fn: "count", cumulative: true)
+# }
