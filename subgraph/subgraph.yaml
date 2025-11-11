@@ -4,11 +4,11 @@ schema:
 dataSources:
   - kind: ethereum/contract
     name: tokenregistry
-    network: localhost
+    network: polygon-amoy
     source:
-      address: "0x61978b4272a429f14a186e10DEAA51bb8a7Fc6a8"
+      address: "0x14962A881EAc403b600B484e777d8dE7232b3223"
       abi: TokenRegistry
-      startBlock: 11351972
+      startBlock: 28845965
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -54,7 +54,7 @@ dataSources:
 templates:
   - kind: ethereum/contract
     name: token
-    network: localhost
+    network: polygon-amoy
     source:
       abi: Token
     mapping:

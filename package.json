@@ -33,8 +33,10 @@
     "contract:compile": "npx hardhat compile",
     "deploy:local": "npx hardhat ignition deploy --network localhost ignition/modules/SonyBankStableCoin.ts",
     "test": "forge test",
-    "graph:compile": "cd subgraph && yq -i e '.dataSources[].network = \"localhost\" | (.templates[]?.network = \"localhost\")' subgraph.yaml && npx graph codegen subgraph.yaml && npx graph build subgraph.yaml",
-    "graph:deploy:local": "npm run graph:compile && npx graph create --node http://localhost:8020 sbsc && cd subgraph && npx graph deploy --version-label v1.0.$(date +%s) --node http://localhost:8020 --ipfs http://localhost:5001/api/v0 sbsc subgraph.yaml && echo 'Check it out on http://localhost:8000/subgraphs/name/sbsc/'",
+    "graph:compile": "cd subgraph && npx graph codegen subgraph.yaml && npx graph build subgraph.yaml",
+    "graph:deploy:local": "npm run graph:compile && npx graph create --node http://localhost:8020 sbsc || true && cd subgraph && npx graph deploy --version-label v1.0.$(date +%s) --node http://localhost:8020 --ipfs http://localhost:5001/api/v0 sbsc subgraph.yaml",
+    "graph:compile:amoy": "cd subgraph && npx graph codegen subgraph.yaml && npx graph build subgraph.yaml",
+    "graph:deploy:amoy": "npx graph create --node http://localhost:8020 sbsc || true && cd subgraph && npx graph deploy --version-label v1.0.$(date +%s) --node http://localhost:8020 --ipfs http://localhost:5001/api/v0 sbsc subgraph.yaml",
     "forge:coverageReport": "forge coverage --report lcov && mkdir coverage &&  lcov-viewer lcov -o ./coverage ./lcov.info  "
   }
 }

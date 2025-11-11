@@ -17,7 +17,7 @@ services:
       postgres_pass: let-me-in
       postgres_db: graph-node
       ipfs: 'ipfs:5001'
-      ethereum: 'localhost:https://amoy.settlemint.net'
+      ethereum: 'polygon-amoy:https://polygon-amoy.drpc.org'
       GRAPH_LOG: info
   ipfs:
     image: ipfs/kubo:v0.29.0
