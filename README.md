@@ -30,3 +30,22 @@ FactoryModule#Factory - 0xf495f4a4163EC9aB3CC1171F62c0fd6cfBf7595a
 ### Before running
 npm run graph:compile
 run `forge build` to get the out folder with contract abis
+
+### Fresh Deployment steps 
+rm -rf ignition/deployments/chain-80002
+rm -rf out artifacts cache cache_forge
+forge build
+npx hardhat compile
+
+npx hardhat vars set WALLET_VAULT 0xA818C7A87604D9cfBFDd2232114FD894A5E446A3
+npx hardhat vars set WALLET_CREATOR 0xf4e69fDf11e743A12561F1CB8bEc092E8FAa00c7
+
+npx hardhat ignition deploy --network amoy ignition/modules/SonyBankStableCoin.ts
+
+### Addresses for Demo
+Deployed Addresses
+
+PrivadoUVModule#PrivadoIdUniversalVerifier - 0xaa422943ccCc0218da9AF9188B121B79Bc6a2898
+RegistryModule#Registry - 0x09f7371C01aF77975907426eCc763894E8f566F8
+FactoryModule#Factory - 0x72CC15fC2FF4636B65Bf9a52fb4eBaB58fb69c93
+
