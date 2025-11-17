@@ -6,9 +6,9 @@ dataSources:
     name: tokenregistry
     network: polygon-amoy
     source:
-      address: "0x14962A881EAc403b600B484e777d8dE7232b3223"
+      address: "0x09f7371C01aF77975907426eCc763894E8f566F8"
       abi: TokenRegistry
-      startBlock: 28845965
+      startBlock: 29029916
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9

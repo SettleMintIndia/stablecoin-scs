@@ -36,7 +36,7 @@
     "graph:compile": "cd subgraph && npx graph codegen subgraph.yaml && npx graph build subgraph.yaml",
     "graph:deploy:local": "npm run graph:compile && npx graph create --node http://localhost:8020 sbsc || true && cd subgraph && npx graph deploy --version-label v1.0.$(date +%s) --node http://localhost:8020 --ipfs http://localhost:5001/api/v0 sbsc subgraph.yaml",
     "graph:compile:amoy": "cd subgraph && npx graph codegen subgraph.yaml && npx graph build subgraph.yaml",
-    "graph:deploy:amoy": "npx graph create --node http://localhost:8020 sbsc || true && cd subgraph && npx graph deploy --version-label v1.0.$(date +%s) --node http://localhost:8020 --ipfs http://localhost:5001/api/v0 sbsc subgraph.yaml",
+    "graph:deploy:amoy": "npx graph create --node http://0.0.0.0:8020 sbsc || true && cd subgraph && npx graph deploy --version-label v1.0.$(date +%s) --node http://0.0.0.0:8020 --ipfs http://0.0.0.0:5001/api/v0 sbsc subgraph.yaml",
     "forge:coverageReport": "forge coverage --report lcov && mkdir coverage &&  lcov-viewer lcov -o ./coverage ./lcov.info  "
   }
 }
