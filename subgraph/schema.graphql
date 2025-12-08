@@ -26,6 +26,14 @@ type Account @entity {
 	events: [Event!]! @derivedFrom(field: "emitter")
 	verfifiedZKPRequests: [VerfifiedZKPRequest!]! @derivedFrom(field: "account")
 }
+
+enum TokenType {
+  CUSTOM
+  USDC  
+  USDT
+  EXTERNAL
+}
+
 type TokenContract @entity {
 	id: Bytes!
 	paused: Boolean
@@ -34,6 +42,8 @@ type TokenContract @entity {
 	symbol: String!
 	decimals: Int!
 	mintType: String
+	tokenType: TokenType  # New field for better categorization
+  	isExternal: Boolean!  # Quick flag to identify external tokens
 
 	cap: BigDecimal!
 	capExact: BigInt!

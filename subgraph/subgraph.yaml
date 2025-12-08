@@ -6,9 +6,9 @@ dataSources:
     name: tokenregistry
     network: polygon-amoy
     source:
-      address: "0x09f7371C01aF77975907426eCc763894E8f566F8"
+      address: "0xE917fE7a0Eb6B1D56e8A7A005117a16083eE03d7"
       abi: TokenRegistry
-      startBlock: 29029916
+      startBlock: 29934085
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.9
@@ -51,6 +51,56 @@ dataSources:
     #     - event: ZKPResponseSubmitted(indexed uint64,indexed address)
     #       handler: handleZKPResponseSubmitted
     #   file: ./src/universal-verifier.ts
+  - kind: ethereum/contract
+    name: usdc-token
+    network: polygon-amoy  # or mainnet depending on your needs
+    source:
+      address: "0x41E94Eb019C0762f9Bfcf9Fb1E58725BfB0e7582" # USDC address on Polygon
+      abi: ERC20
+      startBlock: 29934085  # Set appropriate start block
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - TokenContract
+        - Account
+        - TokenBalance
+        - TokenTransfer
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json  # You'll need a standard ERC20 ABI
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/external-tokens.ts
+  - kind: ethereum/contract
+    name: usdt-token
+    network: polygon-amoy
+    source:
+      address: "0xB8E9BDef4431A147DF3e099D7961715b997BF8b6" # USDT address on Polygon
+      abi: ERC20
+      startBlock: 29934085
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - TokenContract
+        - Account
+        - TokenBalance
+        - TokenTransfer
+      abis:
+        - name: ERC20
+          file: ./abis/ERC20.json
+      eventHandlers:
+        - event: Transfer(indexed address,indexed address,uint256)
+          handler: handleTransfer
+        - event: Approval(indexed address,indexed address,uint256)
+          handler: handleApproval
+      file: ./src/external-tokens.ts
 templates:
   - kind: ethereum/contract
     name: token

@@ -11,6 +11,7 @@ import { fetchToken } from './fetch/erc20';
 export function handleTokenAdded(event: TokenAdded): void {
   let contract = fetchToken(event.params.tokenAddress)
   contract.mintType = event.params.extraData
+  contract.isExternal = false;
   contract.save()
 
   let registryToken = new RegistryToken(event.params.tokenAddress.toHexString())
