@@ -2,7 +2,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: ["feat/local-deployment", "main"]
+    branches: ["devops", "main"]
     tags: ["v*"]
 
 env:
