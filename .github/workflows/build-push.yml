@@ -1,0 +1,51 @@
+name: Build and Push Docker Images
+
+on:
+  push:
+    branches: ["feat/local-deployment", "main"]
+    tags: ["v*"]
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push-api:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Lowercase Image Name
+        run: |
+          echo "IMAGE_NAME=${GITHUB_REPOSITORY,,}" >> ${GITHUB_ENV}
+
+      - name: Determine Environment and Tags
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:latest" >> $GITHUB_ENV
+          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.sha }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:latest" >> $GITHUB_ENV
+          else
+            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.sha }}" >> $GITHUB_ENV
+          fi
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build and push API
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: docker/Dockerfile
+          push: true
+          tags: ${{ env.DOCKER_TAGS }}

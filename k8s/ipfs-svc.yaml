@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ipfs
+  namespace: stablecoin
+spec:
+  clusterIP: None
+  selector:
+    app: ipfs
+  ports:
+    - port: 5001
+      targetPort: 5001

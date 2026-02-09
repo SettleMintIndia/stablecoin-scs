@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ipfs
+  namespace: stablecoin
+spec:
+  serviceName: ipfs
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ipfs
+  template:
+    metadata:
+      labels:
+        app: ipfs
+    spec:
+      containers:
+        - name: ipfs
+          image: ipfs/kubo:v0.29.0
+          ports:
+            - containerPort: 5001
+          volumeMounts:
+            - name: ipfs-storage
+              mountPath: /data/ipfs
+      volumes:
+        - name: ipfs-storage
+          persistentVolumeClaim:
+            claimName: ipfs-pvc

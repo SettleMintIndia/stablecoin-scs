@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: scs-graph-amoy-deploy
+  namespace: stablecoin
+spec:
+  backoffLimit: 1
+  template:
+    spec:
+      restartPolicy: Never
+
+      initContainers:
+        - name: wait-for-graph
+          image: busybox
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for graph-node and ipfs..."
+              until nc -z graph-node 8020 && nc -z ipfs 5001; do
+                sleep 5
+              done
+
+      containers:
+        - name: graph-amoy
+          image: myrepo/graph-amoy-job:1.0.0
+          workingDir: /app
+          command:
+            - sh
+            - -c
+            - |
+              npm run graph:compile:amoy
+              npm run graph:deploy:amoy

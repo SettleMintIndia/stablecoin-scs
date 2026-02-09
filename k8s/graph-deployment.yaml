@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: graph-node
+  namespace: stablecoin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: graph-node
+  template:
+    metadata:
+      labels:
+        app: graph-node
+    spec:
+      containers:
+        - name: graph-node
+          image: graphprotocol/graph-node
+          ports:
+            - containerPort: 8000
+            - containerPort: 8001
+            - containerPort: 8020
+            - containerPort: 8030
+            - containerPort: 8040
+          env:
+            - name: postgres_host
+              value: postgres
+            - name: postgres_user
+              value: graph-node
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: POSTGRES_PASSWORD
+            - name: postgres_db
+              value: graph-node
+            - name: ipfs
+              value: http://ipfs:5001
+            - name: ethereum
+              value: "polygon-amoy:https://polygon-amoy.drpc.org"
+            - name: GRAPH_LOG
+              value: info
