@@ -49,3 +49,4 @@ PrivadoUVModule#PrivadoIdUniversalVerifier - 0xaa422943ccCc0218da9AF9188B121B79B
 RegistryModule#Registry - 0x09f7371C01aF77975907426eCc763894E8f566F8
 FactoryModule#Factory - 0x72CC15fC2FF4636B65Bf9a52fb4eBaB58fb69c93
 
+
