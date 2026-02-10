@@ -82,4 +82,10 @@ jobs:
             --dry-run=client -o yaml | kubectl apply -f -
       - name: Deploy
         run: |
+          # if kubectl get job stablecoin -n stablecoin >/dev/null 2>&1; then
+          #   echo "Job exists. Deleting job..."
+          #   kubectl delete job -n stablecoin -f k8s/job.yaml
+          #   kubectl apply -n stablecoin -f k8s/job.yaml
+          # else
+          #   echo "Job does not exist. Creating Job..."
             kubectl apply -n stablecoin -f k8s/job.yaml
