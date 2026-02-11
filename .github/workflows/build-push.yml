@@ -2,7 +2,7 @@ name: Build and Push Docker Images
 
 on:
   push:
-    branches: ["devops", "main"]
+    branches: ["devops"]
     tags: ["v*"]
 
 env:
@@ -26,7 +26,7 @@ jobs:
         run: |
           if [[ "${{ github.ref_type }}" == "tag" ]]; then
             echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:latest" >> $GITHUB_ENV
-          elif [[ "${{ github.ref_name }}" == "main" ]]; then
+          elif [[ "${{ github.ref_name }}" == "devops" ]]; then
             echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.sha }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:latest" >> $GITHUB_ENV
           else
             echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.sha }}" >> $GITHUB_ENV
