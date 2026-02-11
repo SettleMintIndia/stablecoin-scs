@@ -23,13 +23,13 @@ spec:
             - containerPort: 8030
             - containerPort: 8040
           env:
-            - name: HOST
-              value: "0.0.0.0"
             - name: postgres_host
               value: postgres
+            - name: postgres_port
+              value: "5432"
             - name: postgres_user
               value: graph-node
-            - name: POSTGRES_PASSWORD
+            - name: postgres_pass
               valueFrom:
                 secretKeyRef:
                   name: postgres-secret
