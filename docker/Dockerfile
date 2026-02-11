@@ -6,18 +6,19 @@ RUN apt-get update && apt-get install -y curl git build-essential
 WORKDIR /app
 COPY . .
 
-# Install Foundry properly
-RUN curl -L https://foundry.paradigm.xyz | bash
-RUN bash -i -c "source /root/.bashrc && foundryup && /root/.cargo/bin/forge --version"
+# Install Foundry and add to PATH
+RUN curl -L https://foundry.paradigm.xyz | bash && \
+    bash -i -c "foundryup" && \
+    echo 'export PATH="$HOME/.cargo/bin:$PATH"' >> /root/.bashrc
 
 # Install dependencies
 RUN npm install
 
 # Build contracts using Foundry
-RUN bash -i -c "source /root/.bashrc && /root/.cargo/bin/forge build"
+RUN bash -c "source /root/.bashrc && forge build"
 
 # Compile contracts using Hardhat
-RUN bash -i -c "source /root/.bashrc && npx hardhat compile"
+RUN bash -c "source /root/.bashrc && npx hardhat compile"
 
 # Runtime stage
 FROM node:20-alpine
