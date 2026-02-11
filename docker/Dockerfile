@@ -1,5 +1,5 @@
 # Builder stage - compile contracts
-FROM ubuntu:22.04 AS builder
+FROM node:20 AS builder
 
 RUN apt-get update && apt-get install -y curl git build-essential
 
@@ -10,9 +10,8 @@ COPY . .
 RUN curl -L https://foundry.paradigm.xyz | bash
 RUN bash -i -c "source /root/.bashrc && foundryup"
 
-# Install Node.js in builder
-RUN apt-get install -y nodejs npm && \
-    npm install
+# Install dependencies
+RUN npm install
 
 # Build contracts using Foundry
 RUN bash -i -c "source /root/.bashrc && forge build"
