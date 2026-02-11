@@ -9,12 +9,13 @@ COPY . .
 # Install Foundry properly
 RUN curl -L https://foundry.paradigm.xyz | bash
 RUN bash -i -c "source /root/.bashrc && foundryup"
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Install dependencies
 RUN npm install
 
 # Build contracts using Foundry
-RUN bash -i -c "source /root/.bashrc && forge build"
+RUN forge build
 
 # Compile contracts using Hardhat
 RUN npx hardhat compile
