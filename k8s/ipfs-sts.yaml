@@ -19,6 +19,9 @@ spec:
           image: ipfs/kubo:v0.29.0
           ports:
             - containerPort: 5001
+          env:
+            - name: HOST
+              value: "0.0.0.0"
           volumeMounts:
             - name: ipfs-storage
               mountPath: /data/ipfs
