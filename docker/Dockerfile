@@ -1,21 +1,21 @@
 # Builder stage - compile contracts
 FROM ubuntu:22.04 AS builder
 
-RUN apt-get update && apt-get install -y curl git
+RUN apt-get update && apt-get install -y curl git build-essential
 
 WORKDIR /app
 COPY . .
 
-# Install Foundry
-RUN curl -L https://foundry.paradigm.xyz | bash && \
-    bash ~/.foundryup
+# Install Foundry properly
+RUN curl -L https://foundry.paradigm.xyz | bash
+RUN bash -i -c "source /root/.bashrc && foundryup"
 
 # Install Node.js in builder
 RUN apt-get install -y nodejs npm && \
     npm install
 
 # Build contracts using Foundry
-RUN ~/.cargo/bin/forge build
+RUN bash -i -c "source /root/.bashrc && forge build"
 
 # Compile contracts using Hardhat
 RUN npx hardhat compile
