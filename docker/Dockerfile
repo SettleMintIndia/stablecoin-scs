@@ -8,17 +8,16 @@ COPY . .
 
 # Install Foundry properly
 RUN curl -L https://foundry.paradigm.xyz | bash
-RUN bash -i -c "source /root/.bashrc && foundryup"
-ENV PATH="/root/.cargo/bin:${PATH}"
+RUN bash -i -c "source /root/.bashrc && foundryup && /root/.cargo/bin/forge --version"
 
 # Install dependencies
 RUN npm install
 
 # Build contracts using Foundry
-RUN forge build
+RUN bash -i -c "source /root/.bashrc && /root/.cargo/bin/forge build"
 
 # Compile contracts using Hardhat
-RUN npx hardhat compile
+RUN bash -i -c "source /root/.bashrc && npx hardhat compile"
 
 # Runtime stage
 FROM node:20-alpine
