@@ -23,7 +23,7 @@ spec:
       #         done
       containers:
         - name: graph-amoy
-          image: ghcr.io/settlemintindia/stablecoin-scs/stablecoin-scs
+          image: ghcr.io/settlemintindia/stablecoin-scs:latest
           imagePullPolicy: Always
           workingDir: /app
           command:

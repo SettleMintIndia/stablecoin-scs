@@ -25,11 +25,11 @@ jobs:
       - name: Determine Environment and Tags
         run: |
           if [[ "${{ github.ref_type }}" == "tag" ]]; then
-            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:latest" >> $GITHUB_ENV
+            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}:latest" >> $GITHUB_ENV
           elif [[ "${{ github.ref_name }}" == "devops" ]]; then
-            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.sha }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:latest" >> $GITHUB_ENV
+            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}:${{ github.sha }},${REGISTRY}/${IMAGE_NAME}:latest" >> $GITHUB_ENV
           else
-            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}/stablecoin-scs:${{ github.sha }}" >> $GITHUB_ENV
+            echo "DOCKER_TAGS=${REGISTRY}/${IMAGE_NAME}:${{ github.ref_name }},${REGISTRY}/${IMAGE_NAME}:${{ github.sha }}" >> $GITHUB_ENV
           fi
 
       - name: Log in to the Container registry
