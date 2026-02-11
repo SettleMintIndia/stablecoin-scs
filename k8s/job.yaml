@@ -10,17 +10,19 @@ spec:
       restartPolicy: Never
       imagePullSecrets:
         - name: ghcr-secret
-      # initContainers:
-      #   - name: wait-for-graph
-      #     image: busybox
-      #     command:
-      #       - sh
-      #       - -c
-      #       - |
-      #         echo "Waiting for graph-node and ipfs..."
-      #         until nc -z graph-node 8020 && nc -z ipfs 5001; do
-      #           sleep 5
-      #         done
+      initContainers:
+        - name: wait-for-graph
+          image: busybox:1.35
+          command:
+            - sh
+            - -c
+            - |
+              echo "Waiting for graph-node and ipfs..."
+              until nc -z graph-node 8020 && nc -z ipfs 5001; do
+                echo "Waiting for services..."
+                sleep 5
+              done
+              echo "Services are ready!"
       containers:
         - name: graph-amoy
           image: ghcr.io/settlemintindia/stablecoin-scs:latest
