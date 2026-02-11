@@ -37,7 +37,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GHCR_PAT || secrets.GITHUB_TOKEN }}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
@@ -74,12 +74,12 @@ jobs:
         run: kubectl get nodes
       - name: Create GHCR imagePullSecret
         run: |
+          kubectl delete secret ghcr-secret -n stablecoin --ignore-not-found=true
           kubectl create secret docker-registry ghcr-secret \
             --docker-server=ghcr.io \
             --docker-username=${{ github.actor }} \
-            --docker-password=${{ secrets.GITHUB_TOKEN }} \
-            --namespace=stablecoin \
-            --dry-run=client -o yaml | kubectl apply -f -
+            --docker-password="${{ secrets.GHCR_PAT || secrets.GITHUB_TOKEN }}" \
+            --namespace=stablecoin
       - name: Deploy
         run: |
             kubectl apply -n stablecoin -f k8s/job.yaml
