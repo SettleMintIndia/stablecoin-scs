@@ -4,6 +4,7 @@ metadata:
   name: graph-node
   namespace: stablecoin
 spec:
+  clusterIP: None
   selector:
     app: graph-node
   ports:

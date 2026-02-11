@@ -18,7 +18,7 @@ spec:
             - -c
             - |
               echo "Waiting for graph-node and ipfs..."
-              until nc -z graph-node 8020 && nc -z ipfs 5001; do
+              until nc -z ipfs 5001; do
                 echo "Waiting for services..."
                 sleep 5
               done
